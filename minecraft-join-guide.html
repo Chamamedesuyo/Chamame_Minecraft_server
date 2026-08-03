@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>サーバー参加ガイド</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#15140f;
+    --bg-1:#1d1c15;
+    --panel:#22211a;
+    --panel-line:#3a3826;
+    --grass:#6fae3a;
+    --grass-dark:#4f8028;
+    --dirt:#8a5a34;
+    --stone:#8b8b83;
+    --gold:#e6c250;
+    --blurple:#5865f2;
+    --blurple-dark:#4048c9;
+    --cream:#efe9d6;
+    --cream-dim:#b8b19a;
+    --danger:#e05c5c;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:
+      radial-gradient(1200px 600px at 10% -10%, #24261a 0%, transparent 60%),
+      radial-gradient(1000px 700px at 100% 0%, #1c2417 0%, transparent 55%),
+      var(--bg-0);
+    color:var(--cream);
+    font-family:"Noto Sans JP", sans-serif;
+    line-height:1.7;
+    min-height:100vh;
+    padding:0 0 80px;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:64px 24px 56px;
+    text-align:center;
+    overflow:hidden;
+    border-bottom:4px solid var(--grass-dark);
+    background:
+      linear-gradient(180deg, rgba(111,174,58,0.10), transparent 70%),
+      var(--bg-1);
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size:28px 28px;
+    pointer-events:none;
+  }
+  .eyebrow{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    font-size:11px;
+    letter-spacing:.14em;
+    color:var(--gold);
+    background:rgba(230,194,80,0.08);
+    border:1px solid rgba(230,194,80,0.35);
+    padding:7px 14px;
+    border-radius:3px;
+    margin-bottom:22px;
+  }
+  .eyebrow .dot{
+    width:7px; height:7px; background:var(--grass);
+    box-shadow:0 0 0 2px rgba(111,174,58,0.25);
+  }
+  h1.title{
+    position:relative;
+    font-family:"Press Start 2P", monospace;
+    font-size:clamp(20px, 4.2vw, 34px);
+    line-height:1.55;
+    margin:0 0 18px;
+    color:var(--cream);
+    text-shadow:3px 3px 0 var(--grass-dark), 3px 3px 0 rgba(0,0,0,0.3);
+    letter-spacing:1px;
+  }
+  .hero p.sub{
+    position:relative;
+    max-width:560px;
+    margin:0 auto;
+    color:var(--cream-dim);
+    font-size:15px;
+  }
+  .hero .track{
+    position:relative;
+    margin-top:34px;
+    display:flex;
+    justify-content:center;
+    gap:6px;
+  }
+  .hero .track span{
+    width:34px; height:8px; background:var(--grass);
+    opacity:.85;
+  }
+  .hero .track span:nth-child(2n){ background:var(--dirt); }
+
+  /* ---------- LAYOUT ---------- */
+  .wrap{
+    max-width:760px;
+    margin:0 auto;
+    padding:0 20px;
+  }
+  .stage-label{
+    margin:56px 0 22px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .stage-label .badge{
+    font-family:"Press Start 2P", monospace;
+    font-size:10px;
+    color:#15140f;
+    background:var(--gold);
+    padding:6px 10px;
+    white-space:nowrap;
+  }
+  .stage-label .line{
+    height:2px;
+    flex:1;
+    background:repeating-linear-gradient(90deg, var(--panel-line) 0 6px, transparent 6px 12px);
+  }
+  .stage-label .txt{
+    font-size:13px;
+    color:var(--cream-dim);
+    letter-spacing:.05em;
+  }
+
+  /* ---------- STEP TRACK ---------- */
+  .track-rail{
+    position:relative;
+    padding-left:46px;
+  }
+  .track-rail::before{
+    content:"";
+    position:absolute;
+    left:19px; top:6px; bottom:6px;
+    width:2px;
+    background:repeating-linear-gradient(180deg, var(--panel-line) 0 10px, transparent 10px 18px);
+  }
+  .step{
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:4px;
+    padding:22px 22px 24px;
+    margin-bottom:18px;
+  }
+  .step::before{
+    content:attr(data-n);
+    position:absolute;
+    left:-46px; top:20px;
+    width:38px; height:38px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:"Press Start 2P", monospace;
+    font-size:13px;
+    color:#15140f;
+    background:var(--grass);
+    border:2px solid var(--grass-dark);
+    box-shadow:0 0 0 4px var(--bg-0);
+  }
+  .step.discord::before{ background:var(--blurple); border-color:var(--blurple-dark); }
+  .step h3{
+    margin:0 0 6px;
+    font-size:16.5px;
+    font-weight:700;
+    color:var(--cream);
+  }
+  .step p{
+    margin:0 0 12px;
+    color:var(--cream-dim);
+    font-size:14px;
+  }
+  .step p:last-of-type{ margin-bottom:0; }
+  .step p.note{
+    background:rgba(230,194,80,0.08);
+    border-left:3px solid var(--gold);
+    padding:10px 12px;
+    color:var(--cream);
+    font-size:13.5px;
+    border-radius:0 3px 3px 0;
+  }
+  .step p.warn{
+    background:rgba(224,92,92,0.08);
+    border-left:3px solid var(--danger);
+    padding:10px 12px;
+    color:var(--cream);
+    font-size:13.5px;
+    border-radius:0 3px 3px 0;
+  }
+  .img-cap{
+    display:block;
+    font-size:12px;
+    color:var(--cream-dim);
+    margin-top:4px;
+  }
+
+  /* buttons / copy fields */
+  .action-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:14px;
+  }
+  .btn{
+    appearance:none;
+    border:none;
+    cursor:pointer;
+    font-family:"Noto Sans JP", sans-serif;
+    font-weight:700;
+    font-size:13.5px;
+    padding:11px 18px;
+    border-radius:3px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    text-decoration:none;
+    transition:transform .08s ease, filter .15s ease;
+  }
+  .btn:active{ transform:translateY(1px); }
+  .btn-link{
+    background:var(--grass);
+    color:#15140f;
+    border-bottom:3px solid var(--grass-dark);
+  }
+  .btn-link:hover{ filter:brightness(1.08); }
+  .btn-discord{
+    background:var(--blurple);
+    color:#fff;
+    border-bottom:3px solid var(--blurple-dark);
+  }
+  .btn-discord:hover{ filter:brightness(1.08); }
+
+  .copy-field{
+    display:flex;
+    align-items:stretch;
+    background:#141310;
+    border:1px solid var(--panel-line);
+    border-radius:3px;
+    overflow:hidden;
+    max-width:100%;
+  }
+  .copy-field code{
+    flex:1;
+    padding:11px 14px;
+    font-family:"SFMono-Regular", Consolas, monospace;
+    font-size:13.5px;
+    color:var(--gold);
+    white-space:nowrap;
+    overflow-x:auto;
+  }
+  .copy-btn{
+    appearance:none;
+    border:none;
+    border-left:1px solid var(--panel-line);
+    background:#1d1c15;
+    color:var(--cream);
+    cursor:pointer;
+    padding:0 16px;
+    font-size:12.5px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    white-space:nowrap;
+  }
+  .copy-btn:hover{ background:#26251c; }
+  .copy-btn.copied{ background:var(--grass-dark); color:#fff; }
+
+  /* mini inline label pill */
+  .pill{
+    display:inline-block;
+    font-size:11px;
+    padding:2px 8px;
+    border-radius:20px;
+    background:rgba(111,174,58,0.15);
+    color:var(--grass);
+    border:1px solid rgba(111,174,58,0.35);
+    margin-bottom:8px;
+  }
+  .pill.d{
+    background:rgba(88,101,242,0.15);
+    color:#9aa3ff;
+    border-color:rgba(88,101,242,0.4);
+  }
+
+  footer{
+    max-width:760px;
+    margin:60px auto 0;
+    padding:0 20px;
+    text-align:center;
+    color:var(--cream-dim);
+    font-size:12.5px;
+  }
+  footer .fin{
+    font-family:"Press Start 2P", monospace;
+    font-size:11px;
+    color:var(--gold);
+    margin-bottom:10px;
+    letter-spacing:1px;
+  }
+
+  @media (max-width:520px){
+    .track-rail{ padding-left:38px; }
+    .step::before{ left:-38px; width:32px; height:32px; font-size:11px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="hero">
+    <span class="eyebrow"><span class="dot"></span>MINECRAFT × DISCORD</span>
+    <h1 class="title">サーバー参加<br>ガイド</h1>
+    <p class="sub">Prism Launcher の準備から Discord 連携まで、順番に進めていただければ迷うことはありません。</p>
+    <div class="track"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  </div>
+
+  <div class="wrap">
+
+    <div class="stage-label">
+      <span class="badge">STAGE 1</span>
+      <span class="line"></span>
+      <span class="txt">Prism Launcher を準備する</span>
+    </div>
+
+    <div class="track-rail">
+
+      <div class="step" data-n="1">
+        <span class="pill">ダウンロード</span>
+        <h3>Prism Launcher をダウンロード</h3>
+        <p>下のボタンから公式ダウンロードページを開いてください。ページが開いたら <b>Windows</b> であることをご確認のうえ、ピンク色の「<b>Install exe</b>」ボタンをクリックしてください。</p>
+        <div class="action-row">
+          <a class="btn btn-link" href="https://prismlauncher.org/download/windows/" target="_blank" rel="noopener">
+            ⬇ ダウンロードページを開く
+          </a>
+        </div>
+      </div>
+
+      <div class="step" data-n="2">
+        <span class="pill">インストール</span>
+        <h3>インストール &amp; ログイン</h3>
+        <p>ダウンロードした exe ファイルを実行し、Prism Launcher をインストールしてください。起動したら、Microsoft アカウントでログインしておきましょう。</p>
+      </div>
+
+      <div class="step" data-n="3">
+        <span class="pill">ダウンロード</span>
+        <h3>導入用ファイルをダウンロード</h3>
+        <p>サーバー参加用の構成ファイルを、こちらからダウンロードしてください。</p>
+        <div class="action-row">
+          <a class="btn btn-link" href="https://drive.google.com/file/d/1iO6b-HXA0sbMUaZcLqgJWLtTm7IDp3Lk/view?usp=drive_link" target="_blank" rel="noopener">
+            ⬇ ファイルをダウンロード
+          </a>
+        </div>
+      </div>
+
+      <div class="step" data-n="4">
+        <span class="pill">セットアップ</span>
+        <h3>Prism Launcher にインポートして起動</h3>
+        <p>Prism Launcher の<b>左上「起動構成を追加」</b>を押し、さきほどダウンロードしたファイルをインポートしてください。追加できたら、そのままクリックしてゲームを起動しましょう。</p>
+        <p class="note">💡 起動に時間がかかることがありますが、そのままお待ちください。</p>
+      </div>
+
+    </div>
+
+    <div class="stage-label">
+      <span class="badge">STAGE 2</span>
+      <span class="line"></span>
+      <span class="txt">サーバーに接続する</span>
+    </div>
+
+    <div class="track-rail">
+
+      <div class="step" data-n="5">
+        <span class="pill">サーバー追加</span>
+        <h3>サーバーを登録する</h3>
+        <p><b>マルチプレイ → サーバーを追加</b>を選択してください。名前はお好きなもので構いません。アドレス欄には、下のサーバーアドレスをコピー&amp;ペーストしてください。</p>
+        <div class="copy-field">
+          <code id="addr">chamame-server.gotdns.ch</code>
+          <button class="copy-btn" onclick="copyText('addr', this)">📋 コピー</button>
+        </div>
+        <p>入力できたら「完了」を押し、登録したサーバーをクリックして接続してください。</p>
+      </div>
+
+      <div class="step" data-n="6">
+        <span class="pill">認証コード</span>
+        <h3>最初は入れない ⚠️ コードをメモ</h3>
+        <p class="warn">1回目の接続では入ることができず、画面に <b>認証コード</b> が表示されます。このコードは忘れないよう、メモしておいてください。</p>
+      </div>
+
+    </div>
+
+    <div class="stage-label">
+      <span class="badge">STAGE 3</span>
+      <span class="line"></span>
+      <span class="txt">Discord でアカウントを連携する</span>
+    </div>
+
+    <div class="track-rail">
+
+      <div class="step discord" data-n="7">
+        <span class="pill d">Discord</span>
+        <h3>/link コマンドを入力</h3>
+        <p>この Discord サーバーの好きなチャンネルで、下のコマンドを入力して送信してください。</p>
+        <div class="copy-field">
+          <code id="cmd">/link</code>
+          <button class="copy-btn" onclick="copyText('cmd', this)">📋 コピー</button>
+        </div>
+        <p><code>/link</code> コマンドを送信すると数字の入力欄が表示されますので、さきほどメモした<b>認証コード（数字）</b>を入力してください。</p>
+      </div>
+
+      <div class="step discord" data-n="8">
+        <span class="pill d">完了</span>
+        <h3>Minecraft からもう一度接続</h3>
+        <p>連携が完了しましたら、Minecraft からもう一度同じサーバーに接続してください。今度は問題なく入れるはずです 🎉</p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="fin">GG — せっとあっぷ かんりょう</div>
+    ご不明な点がございましたら、Discord でお気軽にお尋ねください。
+  </footer>
+
+<script>
+function copyText(id, btn){
+  const text = document.getElementById(id).innerText;
+  const done = () => {
+    const original = btn.innerHTML;
+    btn.innerHTML = "✅ コピー済み";
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.innerHTML = original;
+      btn.classList.remove('copied');
+    }, 1600);
+  };
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+  } else {
+    fallbackCopy(text, done);
+  }
+}
+function fallbackCopy(text, done){
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try { document.execCommand('copy'); } catch(e) {}
+  document.body.removeChild(ta);
+  done();
+}
+</script>
+
+</body>
+</html>
